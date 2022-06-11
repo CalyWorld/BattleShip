@@ -1,19 +1,21 @@
 function shipFactory(length) {
     let shipArray = Array(length).fill("");
-    const getShipLength = ()=> length;
-    const getShipArray = ()=> shipArray;
-    const hit = (num)=>{ 
-        if(num >= getShipLength()){
+    let name = "battleship"
+    const getShipLength = () => length;
+    const getShipArray = () => shipArray;
+    const getShipName = () => name;
+    const hit = (num) => {
+        if (num >= getShipLength()) {
             return;
         }
         shipArray[num] = "hit";
-     }
+    }
 
-    const isSunk = (sunk)=>{
-        if(sunk == true){
+    const isSunk = (sunk) => {
+        if (sunk == true) {
             hit();
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -23,30 +25,39 @@ function shipFactory(length) {
         getShipLength,
         hit,
         isSunk,
+        getShipName,
     }
 }
 
-function gameboardFactory(length){
-    let gameboardArray = Array(length).fill("");
-    const getGameboardLength = ()=> length;
-    const getGameboardArray = ()=> gameboardArray;
-    
-    const placeShipOnGameboard =(num)=>{
-        let ship1 = shipFactory();
-        if(getGameboardLength >= num){
-            return;
-        }else{
-            getGameboardArray[num] = ship1.getShipArray;
+function gameboardFactory() {
+    let ship = shipFactory();
+    let gameboardArray = [["",""],
+    ["",""],
+    ["",""],
+    ["",""],
+    ["",""],
+    ["",""],
+    ["",""],
+    ["",""],
+    ["",""],
+    ["",""]
+];
+    const showGameboard = () => [...gameboardArray];
+  
+    const placeShip = (x,y, direction, battleship) =>{
+        let ship = shipFactory(5); //passing ship fac function into ship and assigning length as argument
+        for(let i = 0; i<ship.getShipLength(); i++){
+
         }
+
     }
 
-    return{
-        getGameboardArray,
-        getGameboardLength,
-        placeShipOnGameboard,
+    return {
+        showGameboard,
+        placeShip
     }
 }
 
 
-export{shipFactory}
-export {gameboardFactory}
+export { shipFactory }
+export { gameboardFactory }
