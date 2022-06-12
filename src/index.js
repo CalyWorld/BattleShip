@@ -30,34 +30,39 @@ function shipFactory(length) {
 }
 
 function gameboardFactory() {
-    let ship = shipFactory();
-    let gameboardArray = [["",""],
-    ["",""],
-    ["",""],
-    ["",""],
-    ["",""],
-    ["",""],
-    ["",""],
-    ["",""],
-    ["",""],
-    ["",""]
-];
+    let gameboardArray = [["", ""],
+    ["", ""],
+    ["", ""],
+    ["", ""],
+    ["", ""],
+    ["", ""],
+    ["", ""],
+    ["", ""],
+    ["", ""],
+    ["", ""]
+    ];
     const showGameboard = () => [...gameboardArray];
-  
-    const placeShip = (x,y, direction, battleship) =>{
-        let ship = shipFactory(5); //passing ship fac function into ship and assigning length as argument
-        for(let i = 0; i<ship.getShipLength(); i++){
 
+    const placeShip = (x, y, direction, battleship) => {
+        let ship = shipFactory(4);
+        if (direction == "horizontal") {
+            for (let i = 0; i < ship.getShipLength(); i++) {
+                gameboardArray[x + i][y] = battleship;
+            }
+            return gameboardArray;
+        } else if (direction == "vertical") {
+            for (let i = 0; i < ship.getShipLength(); i++) {
+                gameboardArray[x][y + i] = battleship;
+            }
+            return gameboardArray;
         }
-
     }
-
     return {
         showGameboard,
-        placeShip
+        placeShip,
     }
 }
 
 
-export { shipFactory }
-export { gameboardFactory }
+export { shipFactory, gameboardFactory }
+

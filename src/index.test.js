@@ -26,9 +26,15 @@ test("check if gameboard is empty", () => {
     expect(gameboard.showGameboard()[0][0]).toEqual("");
 });
 
-test("check if ship is placed at gameboard coordinates", () => {
+test("check if ship is placed at gameboard coordinates horizontally", () => {
     let gameboard = gameboardFactory();
-    gameboard.placeShip(0, 0, horizontal, "battleship");
+    gameboard.placeShip(0, 0, "horizontal", "battleship");
+    expect(gameboard.showGameboard()[0][0]).toEqual("battleship");
+});
+
+test("check if ship is placed at gameboard coordinates vertically", () => {
+    let gameboard = gameboardFactory();
+    gameboard.placeShip(0, 0, "vertical", "battleship");
     expect(gameboard.showGameboard()[0][0]).toEqual("battleship");
 });
 
