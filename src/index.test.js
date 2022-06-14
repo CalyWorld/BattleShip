@@ -38,3 +38,13 @@ test("check if ship is placed at gameboard coordinates vertically", () => {
     expect(gameboard.showGameboard()[0][0]).toEqual("battleship");
 });
 
+test("check if ship length overlaps gameboard horizontally", ()=>{
+    let gameboard = gameboardFactory();
+    expect(gameboard.shipfit(0, 0, "horizontal", 4)).toEqual(true);
+})
+test("check if ship length overlaps gameboard vertically", ()=>{
+    let gameboard = gameboardFactory();
+    expect(gameboard.shipfit(0, 0, "vertical", 4)).toEqual(true);
+})
+
+
