@@ -38,11 +38,19 @@ test("ships can't stack over each other vertically", ()=>{
     gameboard.placeShip(0, 5, "vertical", 4);
     expect(gameboard.openBoard(0, 5, "horizontal", 4)).toEqual(false);
 });
+
 // test("gameboard should recieve attack on horizontal coordinate when there is ship", ()=>{
 //     let gameboard = gameboardFactory();
 //     gameboard.recieveAttack(5, 0, "horizontal", 4);
 //     expect(gameboard.showGameboard()[5][0]).toEqual("hit");
 // });
+
+// test("gameboard should recieve attack on vertical coordinate when there is ship", ()=>{
+//     let gameboard = gameboardFactory();
+//     gameboard.recieveAttack(0, 5, "vertical", 4);
+//     expect(gameboard.showGameboard()[0][5]).toEqual("hit");
+// });
+
 
 // test("gameboard checks for miss when the user misses a ship on horizontal coordinate", ()=>{
 //     let gameboard = gameboardFactory();
