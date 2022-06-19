@@ -1,38 +1,36 @@
-function shipFactory(length, name) {
-    
-    let shipArray = Array(length).fill("");
+const shipFactory = ((length)=> {
+
+    const shipArray = Array(length).fill("");
     const getShipLength = () => length;
     const getShipArray = () => [...shipArray];
-    const getShipName = () => name;
-    
-    const hit = (x) => {
-        if (x >= getShipLength()) {
-            return;
-        }
-        shipArray[x] = "hit";
-        getShipLength() - 1;
-    }
 
-    const isSunk = (sunk) => {
-        if (sunk == true) {
-            hit();
-            return true;
-        } else {
-            return false;
+    const hit = ((hitPosition) => {
+        for (let i = 0; i <length; i++){
+            if (i == hitPosition) {
+                shipArray[i] = true;
+            }
         }
+    });
+
+    const isSunk = ((sunk) => {
+            for(let i = 0; i<length; i++){
+                if(shipArray[i] == false){
+                    sunk = false;
+                }
+            return sunk;
     }
+});
 
     return {
         getShipArray,
         getShipLength,
         hit,
         isSunk,
-        getShipName,
     }
-}
+});
 
 
 
 
-export {shipFactory};
+export { shipFactory };
 
