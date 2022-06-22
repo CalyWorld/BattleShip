@@ -1,25 +1,21 @@
-const shipFactory = ((length)=> {
+const shipFactory = ((length) => {
 
-    const shipArray = Array(length).fill("");
+    let shipArray = Array(length).fill("");
     const getShipLength = () => length;
     const getShipArray = () => [...shipArray];
 
-    const hit = ((hitPosition) => {
-        for (let i = 0; i <length; i++){
-            if (i == hitPosition) {
-                shipArray[i] = true;
-            }
-        }
-    });
+    const hit = () => {
+        shipArray.pop();
+        return shipArray;
+    };
 
-    const isSunk = ((sunk) => {
-            for(let i = 0; i<length; i++){
-                if(shipArray[i] == false){
-                    sunk = false;
-                }
-            return sunk;
-    }
-});
+    const isSunk = () => {
+        if (shipArray.length == 0) {
+            return true;
+        } else {
+            return false
+        }
+    };
 
     return {
         getShipArray,
