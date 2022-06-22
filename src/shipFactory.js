@@ -9,6 +9,10 @@ const shipFactory = ((length) => {
         return shipArray;
     };
 
+    const hitCounter = () => {
+        return length - shipArray.length;
+    };
+
     const isSunk = () => {
         if (shipArray.length == 0) {
             return true;
@@ -21,6 +25,7 @@ const shipFactory = ((length) => {
         getShipArray,
         getShipLength,
         hit,
+        hitCounter,
         isSunk,
     }
 });

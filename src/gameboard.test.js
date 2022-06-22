@@ -61,26 +61,59 @@ test("ships can't stack over each other vertically", () => {
 });
 
 
-test("gameboard should recieve attack on horizontal coordinate", ()=>{
+test("check if attack is legal",()=>{
     let gameboard = gameboardFactory();
-    let ship = shipFactory(4);
-    gameboard.showGameboard()[0][5] = ship;
-    gameboard.recieveAttack(5, 0, "horizontal");
-    expect(gameboard.showGameboard()[0][5]).toEqual(true);
+    gameboard.recieveAttack(0,-1);
+    gameboard.recieveAttack(0,0);
+    gameboard.recieveAttack(6,0);
+    gameboard.recieveAttack(0,4);
+    expect(gameboard.checkAttack(0,-1)).toEqual(false);
+    expect(gameboard.checkAttack(0, 0)).toEqual(true)
+    expect(gameboard.checkAttack(6, 0)).toEqual(true);
+    expect(gameboard.checkAttack(0, 4)).toEqual(true);
+    expect(gameboard.checkAttack(0,-500)).toEqual(false)
 });
 
-// test("gameboard should recieve attack on vertical coordinate when there is ship", ()=>{
-//     let gameboard = gameboardFactory();
-//     gameboard.recieveAttack(0, 5, "vertical", 4);
-//     expect(gameboard.showGameboard()[0][5]).toEqual("hit");
-// });
+test("check if player attacks same place twice", ()=>{
+    let gameboard = gameboardFactory();
+    gameboard.recieveAttack(0,0);
+    gameboard.recieveAttack(4,4);
+    gameboard.recieveAttack(0,7);
+    expect(gameboard.checkNotHit(0,0)).toEqual(false);
+    expect(gameboard.checkNotHit(5,0)).toEqual(true);
+    expect(gameboard.checkNotHit(0,7)).toEqual(false);
+    expect(gameboard.checkNotHit(4,4)).toEqual(false);
+});
 
 
-// test("gameboard checks for miss when the user misses a ship on horizontal coordinate", ()=>{
-//     let gameboard = gameboardFactory();
-//     gameboard.checkMiss(4, 0, "horizontal");
-//     gameboard.recieveAttack(5, 0, "horizontal", 4);
-//     expect(gameboard.showGameboard()[4][0]).toEqual("miss")
-// })
+test("ship misses attack", ()=>{
+    let ship = shipFactory(4);
+    let gameboard = gameboardFactory()
+    gameboard.placeShip(0,0, ship);
+    gameboard.placeShip(0,1, ship);
+    gameboard.placeShip(1,0, ship);
+    gameboard.placeShip(2,0, ship);
+    gameboard.shipAttack(0,2);
+    gameboard.shipAttack(0,3);
+    gameboard.shipAttack(3,0);
+    gameboard.shipAttack(4,2);
+    expect(gameboard.gameboardArray[0][2]).toBe("miss");
+    expect(gameboard.gameboardArray[0][3]).toBe("miss");
+    expect(gameboard.gameboardArray[3][0]).toBe("miss");
+    expect(gameboard.gameboardArray[4][2]).toBe("miss");
+});
+
+test("ship doesn't miss attack", ()=>{
+    let ship = shipFactory(4);
+    let gameboard = gameboardFactory();
+    gameboard.placeShip(0,0,ship);
+    gameboard.placeShip(0,1,ship);
+    gameboard.placeShip(0,2,ship);
+    gameboard.placeShip(0,3,ship);
+    gameboard.recieveAttack(0,0);
+    gameboard.recieveAttack(0,1);
+    expect(ship.hitCounter()).toEqual(2);
+});
+
 
 
