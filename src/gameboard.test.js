@@ -113,5 +113,19 @@ test("ship doesn't miss attack", ()=>{
     expect(ship.hitCounter()).toEqual(2);
 });
 
+test("ship sinks when ship parts have been attack", ()=>{
+    let ship = shipFactory(4);
+    let gameboard = gameboardFactory();
+    gameboard.placeShip(0,0,ship, "horizontal");
+    gameboard.placeShip(0,1,ship, "horizontal");
+    gameboard.placeShip(0,2,ship, "horizonntal");
+    gameboard.placeShip(0,3,ship, "horizontal");
+    gameboard.recieveAttack(0,0);
+    gameboard.recieveAttack(0,1);
+    gameboard.recieveAttack(0,2);
+    gameboard.recieveAttack(0,3);
+    expect(ship.isSunk()).toEqual(true);
+
+})
 
 
