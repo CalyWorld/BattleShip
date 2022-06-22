@@ -1,4 +1,4 @@
-import { playerFactory } from "./player";
+import { playerFactory, computerFactory } from "./player";
 import { shipFactory } from "./shipFactory";
 
 test("player must have a name and number", () => {
@@ -21,3 +21,25 @@ test("player should be able to send and recieve attack on ships", () => {
     player.sendAttack(0, 0, player);
     expect(ship.hitCounter()).toBe(1);
 });
+
+test("computer must have a name and number", () => {
+    let computerAi = computerFactory("computer", 1);
+    expect(computerAi.getComputerAiName()).toEqual("computer");
+    expect(computerAi.getComputerAiNum()).toEqual(1);
+});
+
+test("computer should be able to place ship randomly on gameboard", () => {
+
+    let computerAi = computerFactory();
+    let ship = shipFactory(4);
+
+    let x;
+    let y;
+    do {
+        x = Math.floor((Math.random() * 10));
+        y = Math.floor((Math.random() * 10));
+    } while (computerAi.getGameboard().placeShip(x, y, ship, "horizontal") == false);
+    computerAi.getGameboard().placeShip(x, y, ship, "horizontal");
+    expect(computerAi.getGameboard().showGameboard()[x][y]).toEqual(ship);
+});
+
