@@ -1,4 +1,5 @@
 import { shipFactory } from "./shipFactory";
+
 function gameboardFactory() {
 
     let gameboardArray = Array(10).fill("").map(x => Array(10).fill(""));
@@ -59,27 +60,49 @@ function gameboardFactory() {
         }
     }
 
-    // const recieveAttack = (x, y, direction) => {
-    //     if (direction == "horizontal") {
-    //         if (gameboardArray[y][x] !== "") {
-    //             gameboardArray[y][x].hit();
-    //             console.table(gameboardArray);
-    //         }
-    //     }
-    // }
+    const recieveAttack = (row, column) => {
+        let checkBoardAttack = checkAttack(row, column);
+        let checkHit = checkNotHit(row, column);
+        if (!checkBoardAttack) return false;
+        if (!checkHit) return false;
+        shipAttack(row, column);
+        gameboardArray[row][column] = true;
+    }
 
-    // const checkMiss = (x,y,direction)=>{
-    //     let checkBoard = true;
-    //     if(direction == "horizontal"){
-    //         if(gameboardArray[x][y])
-    //     }
-    // }
+    const shipAttack = (row, column) => {
+        if (gameboardArray[row][column] == "") {
+            gameboardArray[row][column] = "miss";
+        } else if (gameboardArray[row][column] !== "") {
+            gameboardArray[row][column].hit();
+        }
+    }
+    
+    const checkAttack = (row, column) => {
+        if (row >= 0 && column >= 0 && row <= gameboardArray.length && column <= gameboardArray.length) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    const checkNotHit = (row, column) => {
+        if (gameboardArray[row][column] !== true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     return {
+        gameboardArray,
         showGameboard,
         placeShip,
         shipfit,
         cellEmpty,
-        // recieveAttack
+        checkAttack,
+        recieveAttack,
+        checkNotHit,
+        shipAttack,
     }
 }
 
