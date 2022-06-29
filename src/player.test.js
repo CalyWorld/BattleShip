@@ -110,7 +110,8 @@ test("player should be able to send attack and shink all ship parts", () => {
     player.sendAttack(2, 0, player);
     player.sendAttack(3, 0, player);
     expect(player.getGameboard().showGameboard()[0][0].hitCounter()).toEqual(4);
-    expect(ship.isSunk()).toEqual(true);
+    expect(player.getGameboard().showGameboard()[0][0].isSunk()).toEqual(true);
+    expect(player.getGameboard().showGameboard()[1][0].isSunk()).toEqual(true); 
 });
 
 
@@ -155,12 +156,11 @@ test("Computer should be able to send attack in horizontal direction", () => {
     let ship = shipFactory(4);
     let x = 9;
     let y = 9;
-    while (computerAi.getGameboard().placeShip(x, y, ship, "horizontal") == false && computerAi.getGameboard().recieveAttack(x, y) == false) {
+    while (computerAi.getGameboard().placeShip(x, y, ship, "horizontal") == false) {
         x = Math.floor((Math.random() * 10));
         y = Math.floor((Math.random() * 10));
     }
-    console.log(x);
-    console.log(y);
+
     computerAi.getGameboard().placeShip(x, y, ship, "horizontal");
     console.table(computerAi.getGameboard().showGameboard());
     computerAi.sendAttack(x, y, computerAi);
@@ -175,73 +175,87 @@ test("Computer should be able to send attack in vertical direction", () => {
         x = Math.floor(Math.random() * 10);
         y = Math.floor(Math.random() * 10);
     }
-    while (computerAi.getGameboard().recieveAttack(x, y) == false) {
+    computerAi.getGameboard().placeShip(x, y, ship, "vertical");
+    computerAi.sendAttack(x, y, computerAi);
+    expect(computerAi.getGameboard().showGameboard()[x][y].hitCounter()).toEqual(1);
+});
+
+test("Computer should be able to recieve attack in horizontal direction", () => {
+    let computerAi = computerFactory();
+    let ship = shipFactory(4);
+    let x = 9, y = 9;
+
+    while (computerAi.getGameboard().placeShip(x, y, ship, "horizontal") == false) {
+        x = Math.floor(Math.random() * 10);
+        y = Math.floor(Math.random() * 10);
+    }
+    computerAi.getGameboard().placeShip(x, y, ship, "horizontal");
+    computerAi.attackRecieved(x, y, computerAi);
+    expect(computerAi.getGameboard().showGameboard()[x][y].hitCounter()).toEqual(1);
+});
+
+test("Computer should be able to recieve attack in vertical direction", () => {
+    let computerAi = computerFactory();
+    let ship = shipFactory(4);
+    let x = 9, y = 9;
+    while (computerAi.getGameboard().placeShip(x, y, ship, "vertical") == false) {
         x = Math.floor(Math.random() * 10);
         y = Math.floor(Math.random() * 10);
     }
     computerAi.getGameboard().placeShip(x, y, ship, "vertical");
-    computerAi.sendAttack(x, y, computerAi);
-    expect(ship.hitCounter()).toEqual(1);
+    computerAi.attackRecieved(x, y, computerAi);
+    expect(computerAi.getGameboard().showGameboard()[x][y].hitCounter()).toEqual(1);
 });
 
-// test("Computer should be able to recieve attack in horizontal direction", () => {
-//     let computerAi = computerFactory();
-//     let ship = shipFactory(4);
-//     let x = 9, y = 9;
+test("Computer should be able to miss attacks in horizontal direction", () => {
+    let ship = shipFactory(2);
+    let computerAi = computerFactory()
+    let x = 9, y = 9;
+    while (computerAi.getGameboard().placeShip(x, y, ship, "horizontal") == false) {
+        x = Math.floor(Math.random() * 10);
+        y = Math.floor(Math.random() * 10);
+    }
+    computerAi.getGameboard().placeShip(x, y, ship, "horizontal");
+    computerAi.getGameboard().placeShip(x, y, ship, "horizontal");
+    //values are guessed here because i don't know the random numbers that will be generated
+    computerAi.sendAttack(0, 0, computerAi);
+    computerAi.sendAttack(0, 4, computerAi);
+    expect(computerAi.getGameboard().showGameboard()[0][0]).toEqual("miss");
+    expect(computerAi.getGameboard().showGameboard()[0][4]).toEqual("miss");
+    expect(computerAi.getGameboard().showGameboard()[x][y].hitCounter()).toEqual(0);
+});
 
-//     while (computerAi.getGameboard().placeShip(x, y, ship, "horizontal") == false && computerAi.getGameboard().recieveAttack(x,y) == false) {
-//         x = Math.floor(Math.random() * 10);
-//         y = Math.floor(Math.random() * 10);
-//     }
-//     computerAi.getGameboard().placeShip(x, y, ship, "horizontal");
-//     computerAi.attackRecieved(x, y, computerAi);
-//     expect(ship.hitCounter()).toEqual(1);
-// });
+test("Computer should be able to miss attacks in vertical direction", () => {
+    let ship = shipFactory(2);
+    let computerAi = computerFactory()
+    let x = 9, y = 9;
+    while (computerAi.getGameboard().placeShip(x, y, ship, "vertical") == false) {
+        x = Math.floor(Math.random() * 10);
+        y = Math.floor(Math.random() * 10);
+    }
+    computerAi.getGameboard().placeShip(x, y, ship, "vertical");
+    computerAi.getGameboard().placeShip(x, y, ship, "vertical");
+    //values are guessed here because i don't know the random numbers that will be generated
+    computerAi.sendAttack(0, 0, computerAi);
+    computerAi.sendAttack(0, 4, computerAi);
+    expect(computerAi.getGameboard().showGameboard()[0][0]).toEqual("miss");
+    expect(computerAi.getGameboard().showGameboard()[0][4]).toEqual("miss");
+    expect(computerAi.getGameboard().showGameboard()[x][y].hitCounter()).toEqual(0);
+});
 
-// test("Computer should be able to recieve attack in vertical direction", () => {
-//     let computerAi = computerFactory();
-//     let ship = shipFactory(4);
-//     let x = 9, y = 9, a =
-//     while (computerAi.getGameboard().placeShip(x, y, ship, "vertical") == false  && computerAi.getGameboard().recieveAttack(x,y) == false){
-//         x = Math.floor(Math.random() * 10);
-//         y = Math.floor(Math.random() * 10);
-//     }
-//     computerAi.getGameboard().placeShip(x, y, ship, "vertical");
-//     computerAi.attackRecieved(x, y, computerAi);
-//     expect(ship.hitCounter()).toEqual(1);
-// });
-
-// test("Computer should be able to miss attacks in horizontal direction", () => {
-//     let ship = shipFactory(2);
-//     let computerAi = computerFactory()
-//     let x, y;
-//     do {
-//         x = Math.floor(Math.random() * 10);
-//         y = Math.floor(Math.random() * 10);
-//     } while (computerAi.getGameboard().placeShip(x, y, ship, "horizontal") == false && computerAi.getGameboard().recieveAttack(x,y));
-//     computerAi.getGameboard().placeShip(x, y, ship, "horizontal");
-//     computerAi.getGameboard().placeShip(x, y, ship, "horizontal");
-//     //values are guessed here because i don't know the random numbers that will be generated
-//     computerAi.sendAttack(0, 0, computerAi);
-//     computerAi.sendAttack(0, 4, computerAi);
-//     expect(computerAi.getGameboard().showGameboard()[0][0]).toEqual("miss");
-//     expect(computerAi.getGameboard().showGameboard()[0][4]).toEqual("miss");
-//     expect(ship.hitCounter()).toEqual(0);
-// });
-
-// test("Computer should be able to sink when ship part have been hit", () => {
-//     let ship = shipFactory(4);
-//     let computerAi = computerFactory();
-//     let x = 9;
-//     let y = 9;
-//     while (computerAi.getGameboard().placeShip(x, y, ship, "vertical") == false && computerAi.getGameboard().recieveAttack(x, y) == false) {
-//         x = 0;
-//         y = 0;
-//     }
-//     computerAi.getGameboard().placeShip(x, y, ship, "vertical");
-//     computerAi.sendAttack(x, y, computerAi);
-//     expect(ship.hitCounter()).toEqual(1);
-//     expect(ship.isSunk()), toEqual(false);
-// });
+test("Computer should be able to sink when ship part have been hit", () => {
+    let ship = shipFactory(4);
+    let computerAi = computerFactory();
+    let x = 9;
+    let y = 9;
+    while (computerAi.getGameboard().placeShip(x, y, ship, "vertical") == false){
+        x = 0;
+        y = 0;
+    }
+    computerAi.getGameboard().placeShip(x, y, ship, "vertical");
+    computerAi.sendAttack(x, y, computerAi);
+    expect(computerAi.getGameboard().showGameboard()[x][y].hitCounter()).toEqual(1);
+    expect(computerAi.getGameboard().showGameboard()[x][y].isSunk()).toEqual(false);
+});
 
 
