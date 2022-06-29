@@ -1,4 +1,5 @@
 import { gameboardFactory } from "./gameboard";
+import { shipFactory } from "./shipFactory";
 const playerFactory = ((name, number) => {
     const getPlayerName = () => name;
     const getPlayerNum = () => number;
@@ -18,7 +19,7 @@ const playerFactory = ((name, number) => {
     }
 
     const sendAttack = (row, column, player) => {
-        return player.attackRecieved(row, column);
+        player.attackRecieved(row, column);
     }
 
     return {
@@ -32,14 +33,43 @@ const playerFactory = ((name, number) => {
 
 const computerFactory = (name, number) => {
 
-    const getName = ()=> name;
-    const getNum = ()=> number;
+    let gameboard = gameboardFactory();
 
+    const getGameboard = () => {
+        return gameboard
+    };
+    const getComputerAiName = () => name;
+    const getComputerAiNum = () => number;
 
-    return{
-        getName,
-        getNum
+    const attackRecieved = (row, column) => {
+        if (gameboard.recieveAttack(row, column)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    const sendAttack = (row, column, computer) => {
+        computer.attackRecieved(row, column);
+    }
+
+    return {
+        getGameboard,
+        getComputerAiName,
+        getComputerAiNum,
+        attackRecieved,
+        sendAttack
     }
 }
+
+
+
+
+let player1 = playerFactory("obinna", 1);
+let player2 = playerFactory("ijeoma", 2);
+let ship = shipFactory(4)
+player2.getGameboard().placeShip(0,5,ship,"horizontal");
+player1.sendAttack(0,5,player2);
+console.table(player2.getGameboard().showGameboard());
 
 export { playerFactory, computerFactory }

@@ -1,15 +1,19 @@
 import { shipFactory } from "./shipFactory";
-
 function gameboardFactory() {
 
     let gameboardArray = Array(10).fill("").map(x => Array(10).fill(""));
 
     const showGameboard = () => [...gameboardArray];
 
+    let ship = shipFactory(5);
+    const shipArray = [];
+    shipArray.push(ship);
+
+
     const placeShip = (row, column, ship, direction) => {
         let shipFit = shipfit(row, column, direction, ship.getShipLength());
+         if (!shipFit) return false;
         let checkSpace = cellEmpty(row, column, direction, ship.getShipLength());
-        if (!shipFit) return false;
         if (!checkSpace) return false;
         if (direction == "horizontal") {
             for (let i = 0; i < ship.getShipLength(); i++) {
@@ -62,11 +66,10 @@ function gameboardFactory() {
 
     const recieveAttack = (row, column) => {
         let checkBoardAttack = checkAttack(row, column);
-        let checkHit = checkNotHit(row, column);
         if (!checkBoardAttack) return false;
-        if (!checkHit) return false;
+        let checkHitLegal = checkNotHit(row, column);
+        if (!checkHitLegal) return false;
         shipAttack(row, column);
-        gameboardArray[row][column] = true;
     }
 
     const shipAttack = (row, column) => {
@@ -74,9 +77,10 @@ function gameboardFactory() {
             gameboardArray[row][column] = "miss";
         } else if (gameboardArray[row][column] !== "") {
             gameboardArray[row][column].hit();
+            shipSunk();
         }
     }
-    
+
     const checkAttack = (row, column) => {
         if (row >= 0 && column >= 0 && row <= gameboardArray.length && column <= gameboardArray.length) {
             return true;
@@ -86,15 +90,19 @@ function gameboardFactory() {
     }
 
     const checkNotHit = (row, column) => {
-        if (gameboardArray[row][column] !== true) {
+        if (gameboardArray[row][column] !== true && gameboardArray[row][column] !== "miss") {
             return true;
         } else {
             return false;
         }
     }
 
+    const shipSunk = () =>{
+        const sunkShip = (eachShip) => eachShip.isSunk();
+        return shipArray.every(sunkShip);
+    }
+
     return {
-        gameboardArray,
         showGameboard,
         placeShip,
         shipfit,
@@ -103,6 +111,7 @@ function gameboardFactory() {
         recieveAttack,
         checkNotHit,
         shipAttack,
+        shipSunk,
     }
 }
 
