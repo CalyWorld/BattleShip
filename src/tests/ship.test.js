@@ -1,4 +1,4 @@
-import { shipFactory } from "./shipFactory";
+import { shipFactory } from "../module/shipFactory";
 
 test("Should return ship length", () => {
     let ship = shipFactory(2);

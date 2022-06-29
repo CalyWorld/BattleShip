@@ -1,5 +1,4 @@
 import { gameboardFactory } from "./gameboard";
-import { shipFactory } from "./shipFactory";
 const playerFactory = ((name, number) => {
     const getPlayerName = () => name;
     const getPlayerNum = () => number;
@@ -65,11 +64,12 @@ const computerFactory = (name, number) => {
 
 
 
-let player1 = playerFactory("obinna", 1);
-let player2 = playerFactory("ijeoma", 2);
-let ship = shipFactory(4)
-player2.getGameboard().placeShip(0,5,ship,"horizontal");
-player1.sendAttack(0,5,player2);
-console.table(player2.getGameboard().showGameboard());
+// let player1 = playerFactory("obinna", 1);
+// let player2 = playerFactory("ijeoma", 2);
+// let ship = shipFactory(4)
+// player2.getGameboard().placeShip(0,5,ship,"horizontal");
+// player1.sendAttack(0,5,player2);
+// player2.getGameboard().showGameboard()[0][5].hitCounter()
+// console.table(player2.getGameboard().showGameboard());
 
 export { playerFactory, computerFactory }

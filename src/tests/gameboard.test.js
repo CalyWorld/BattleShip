@@ -1,5 +1,5 @@
-import { gameboardFactory } from './gameboard';
-import { shipFactory } from "./shipFactory";
+import { gameboardFactory } from '../module/gameboard';
+import { shipFactory } from "../module/shipFactory";
 
 test("check if gameboard is empty", () => {
     let gameboard = gameboardFactory();

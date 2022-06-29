@@ -33,5 +33,5 @@ const shipFactory = ((length) => {
 
 
 
-export { shipFactory };
+export { shipFactory }
 

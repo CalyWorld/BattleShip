@@ -1,5 +1,5 @@
-import { playerFactory, computerFactory } from "./player";
-import { shipFactory } from "./shipFactory";
+import { playerFactory, computerFactory } from "../module/player";
+import { shipFactory } from "../module/shipFactory";
 
 test("player must have a name and number", () => {
     let player = playerFactory("obi", 1);
