@@ -37,5 +37,5 @@ test("player should send attack against computerAi", ()=>{
     computerAi.getGameboard().placeShip(x,y,ship, "horizontal");
     player.sendAttack(x,y,computerAi);
     expect(computerAi.getGameboard().showGameboard()[x][y].hitCounter()).toEqual(1);
-})
+});
 
