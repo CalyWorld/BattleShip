@@ -7,7 +7,7 @@ const playerFactory = ((name, number) => {
 
     const getGameboard = () => {
         return gameboard;
-    }
+    };
 
     const attackRecieved = (row, column) => {
         if (gameboard.recieveAttack(row, column)) {
@@ -17,8 +17,8 @@ const playerFactory = ((name, number) => {
         }
     }
 
-    const sendAttack = (row, column, player) => {
-        player.attackRecieved(row, column);
+    const sendAttack = (row, column, playerToAttack) => {
+        playerToAttack.attackRecieved(row, column);
     }
 
     return {
@@ -40,36 +40,43 @@ const computerFactory = (name, number) => {
     const getComputerAiName = () => name;
     const getComputerAiNum = () => number;
 
-    const attackRecieved = (row, column) => {
-        if (gameboard.recieveAttack(row, column)) {
+    const placeShipRandomly = (ship) => {
+        let row = 9;
+        let column = 9;
+        let orientation = ["horizontal", "vertical"];
+        let direction = Math.floor(Math.random() * orientation.length);
+        while (gameboard.placeShip(row, column, ship, orientation[direction]) == false) {
+            row = Math.floor(Math.random() * 10);
+            column = Math.floor(Math.random() * 10);
+        }
+        gameboard.placeShip(row, column, ship, orientation[direction]);
+    }
+
+    const attackRecieved = (row,column) =>{
+        if(gameboard.recieveAttack(row,column)){
             return true;
-        } else {
+        }else{
             return false;
         }
     }
 
-    const sendAttack = (row, column, computer) => {
-        computer.attackRecieved(row, column);
+    const sendAttack = (playerToAttack) => {
+
+        let row = Math.floor(Math.random() * 10);
+        let column = Math.floor(Math.random() * 10);
+    
+        playerToAttack.attackRecieved(row,column);
     }
+
 
     return {
         getGameboard,
         getComputerAiName,
         getComputerAiNum,
         attackRecieved,
-        sendAttack
+        sendAttack,
+        placeShipRandomly,
     }
 }
-
-
-
-
-// let player1 = playerFactory("obinna", 1);
-// let player2 = playerFactory("ijeoma", 2);
-// let ship = shipFactory(4)
-// player2.getGameboard().placeShip(0,5,ship,"horizontal");
-// player1.sendAttack(0,5,player2);
-// player2.getGameboard().showGameboard()[0][5].hitCounter()
-// console.table(player2.getGameboard().showGameboard());
 
 export { playerFactory, computerFactory }
