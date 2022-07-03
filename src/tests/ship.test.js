@@ -5,6 +5,13 @@ test("Should return ship length", () => {
     expect(ship.getShipLength()).toEqual(2);
 });
 
+test("Should have a name", () => {
+    let ship = shipFactory(2, "BattleShip");
+    expect(ship.getShipLength()).toEqual(2);
+    expect(ship.getShipName()).toEqual("BattleShip");
+});
+
+
 test("returns the position where the ship was hit", () => {
     let ship = shipFactory(2);
     ship.hit();
