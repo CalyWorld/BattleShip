@@ -1,0 +1,47 @@
+* {
+    box-sizing: border-box;
+    /* outline: 1px solid black; */
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.grid-container{
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+}
+:root {
+    --grid-cols: 1;
+    --grid-rows: 1;
+}
+/* .ship-container{
+    display: flex;
+} */
+/* .placeship-btn{
+    border: 1px solid black;
+} */
+#playerBoard {
+    display: grid;
+    grid-gap: 1em;
+    grid-template-rows: repeat(var(--grid-rows), 1fr);
+    grid-template-columns: repeat(var(--grid-cols), 1fr);
+}
+
+.grid-item {
+    padding: 1em;
+    border: 1px solid black;
+    text-align: center;
+}
+
+
+#computerBoard {
+    display: grid;
+    grid-gap: 1em;
+    grid-template-rows: repeat(var(--grid-rows), 1fr);
+    grid-template-columns: repeat(var(--grid-cols), 1fr);
+    /* border-left: 1px solid black; */
+}
