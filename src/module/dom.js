@@ -54,9 +54,9 @@ const displayShipOnGameboard = (e, currShip, currCell, nextShip) => {
         cell.classList.remove("hovered-cell");
         cell.classList.add("ship-cell");
     }
-    for (let i = 0; i < nextShip.getShipLength(); i++) {
-        currCell[i].classList.add("invalid-placement");
-    }
+    // for (let i = 0; i < nextShip.getShipLength(); i++) {
+    //     currCell[i].classList.add("invalid-placement");
+    // }
     return result;
 };
 
@@ -65,12 +65,8 @@ const CellsOnHover = (e, currShip, currCell) => {
     const playerCells = [...playerBoard.children];
     let element = e.target;
     let row = parseInt(element.getAttribute("data-coord")[0]);
-    console.log(row);
     let column = parseInt(element.getAttribute("data-coord")[2]);
-    console.log(column);
     let cell;
-    console.log(currShip);
-    console.log(currDirection);
     for (let i = 0; i < currShip.getShipLength(); i++) {
         if (currDirection == "vertical") {
             cell = findCell(playerCells, row + i, column);
@@ -108,31 +104,33 @@ const placeCellsController = () => {
             ComputerBoard.classList.remove("disable-board");
         }
     });
-        playerBoard.addEventListener("mouseover", (e) => {
+    playerBoard.addEventListener("mouseover", (e) => {
+        if (e.target !== e.currentTarget) {
             CellsOnHover(e, currShip, currCell);
-        });
-    
-        playerBoard.addEventListener("mouseout", (e) => {
+        }
+    });
+
+    playerBoard.addEventListener("mouseout", (e) => {
+        if (e.target !== e.currentTarget) {
             cellsOfHover(e)
             currCell = [];
-        });
-  
-};
+        }
+    });
 
+};
 
 const findCell = (cells, row, column) => {
     return cells.find((cell) =>
-        parseInt(cell.getAttribute("data-coord")[0]) == row && 
+        parseInt(cell.getAttribute("data-coord")[0]) == row &&
         parseInt(cell.getAttribute("data-coord")[2]) == column);
 };
 
 const changeDirection = (direction) => {
     if (currDirection == direction) {
-        currDirection = "Horizontal";
+        currDirection = "horizontal";
     } else {
         currDirection = "vertical"
     }
-   return currDirection;
 };
 
 const enableBoards = () => {
@@ -140,12 +138,12 @@ const enableBoards = () => {
     playerBoard.style.pointerEvents = "auto";
 }
 
-const getDirectionController = () =>{
-    direction.addEventListener("click", (e)=>{
+const getDirectionController = () => {
+    direction.addEventListener("click", (e) => {
         let direction = e.target.value;
         changeDirection(direction);
     });
-}
+};
 
 const show = () => {
     renderPlayerBoard();
