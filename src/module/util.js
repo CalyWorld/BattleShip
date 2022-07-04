@@ -1,7 +1,7 @@
 import {shipFactory} from "./shipFactory";
 
 const utils = () =>{
-    const createdShips = []
+    const createdShips = [];
     let BattleShip = shipFactory(4, "BattleShip");
     let Carrier = shipFactory(5, "Carrier");
     let Destroyer = shipFactory(4, "Destroyer");
@@ -13,7 +13,7 @@ const utils = () =>{
     const getCreatedShips = () => [...createdShips]
 
     return{
-        getCreatedShips
+        getCreatedShips,
     }
     
 }

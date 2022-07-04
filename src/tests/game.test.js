@@ -19,23 +19,8 @@ test("Player should be able to play against player 2", ()=>{
     expect(player2.getGameboard().showGameboard()[0][2]).toEqual(ship);
     
     expect(player2.getGameboard().showGameboard()[0][0].hitCounter()).toEqual(3);
+    expect(player2.getGameboard().showGameboard()[0][0].isSunk()).toEqual(false);
     
 });
 
-test("player should send attack against computerAi", ()=>{
-    let ship = shipFactory(4);
-    let player = playerFactory("leo", 1);
-    let computerAi = computerFactory("computer", 2);
-
-    let x = 9;
-    let y = 9;
-
-    while(computerAi.getGameboard().placeShip(x,y,ship,"horizontal")==false){
-        x = Math.floor(Math.random() * 10);
-        y = Math.floor(Math.random() * 10);
-    }
-    computerAi.getGameboard().placeShip(x,y,ship, "horizontal");
-    player.sendAttack(x,y,computerAi);
-    expect(computerAi.getGameboard().showGameboard()[x][y].hitCounter()).toEqual(1);
-});
 

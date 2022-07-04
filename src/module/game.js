@@ -1,52 +1,40 @@
 import { computerFactory, playerFactory } from "./player";
-
-export const Game = (() => {
+import { utils } from "./util";
+const Game = (() => {
 
     let player = playerFactory("leo", 1);
     let computer = computerFactory("computer", 2);
+
+
     const getPlayer = () => player;
-    const getComputerPlayer = () => computer
+    const getComputerPlayer = () => computer;
 
-    let activePlayer = getPlayer();
-    let opponentPlayer = getComputerPlayer();
+    const placePlayerShip = (row,column,ship,direction)=>{
+        player.getGameboard().placeShip(row,column,ship,direction);
+    };
 
-    const shipPlacements = () => {
-        activePlayer.getGameboard().placeShip(0, 0, ship, "horizontal");
-        activePlayer.getGameboard().placeShip(0, 1, ship, "horizontal");
-        activePlayer.getGameboard().placeShip(0, 2, ship, "horizontal");
+    for(let i = 0; i<utils().getCreatedShips().length; i++){
+        computer.placeShipRandomly(utils().getCreatedShips()[i]);
+    };
 
-        opponentPlayer.getGameboard().placeShip(x, y, ship, "horizontal"),
-        opponentPlayer.getGameboard().placeShip(x, y, ship, "horizontal");
-        opponentPlayer.getGameboard().placeShip(x, y, ship, "horizontal");
-    }
-
-    const attackShip = () => {
-        activePlayer.sendAttack(x, y, opponentPlayer);
-        gameOver();
-        activePlayer.sendAttack(x, y, opponentPlayer);
-        gameOver();
-        activePlayer.sendAttack(x, y, opponentPlayer);
-        gameOver();
-    }
-
+    // console.table(computer.getGameboard().showGameboard());
 
     const gameOver = () => {
-        if (activePlayer.getGameboard().shipSunk == true) {
+        if (player.getGameboard().isSunk == true) {
             console.log(`${computer.getComputerAiName()} is the winner`);
-        } else if (opponentPlayer.getGameboard().shipSunk == true) {
+        } else if (computer.getGameboard().isSunk == true) {
             console.log(`${player.getPlayerName()} is the winner`);
-        } else if (activePlayer.getGameboard().shipSunk == false && opponentPlayer.getGameboard().shipSunk == false) {
+        } else if (player.getGameboard().isSunk == false && computer.getGameboard().shipSunk == false) {
             return false;
         }
     };
 
     return {
-        shipPlacements,
         gameOver,
-        attackShip,
         getPlayer,
         getComputerPlayer,
+        placePlayerShip,
     }
 
 });
-
+export { Game };

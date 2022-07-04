@@ -1,13 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script defer src="main.js"></script>
-    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <title>Battleship</title>
 </head>
+
 <body>
-    <div id="content"></div>
+    <div id="content">
+        <div class="orientation-container">
+            <label for="direction">Choose a Direction</label>
+            <select name = "direction" id="direction">
+                <option value="horizontal">horizontal</option>
+                <option value="vertical">vertical</option>
+            </select>
+        </div>
+        <div class="shipbtn-container">
+            <div class="placeship-btn">BattleShip</div>
+        </div>
+        <div class="grid-container">
+            <div id="playerBoard"></div>
+            <div id="computerBoard"></div>
+        </div>
+    </div>
 </body>
+
 </html>

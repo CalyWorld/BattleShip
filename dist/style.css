@@ -7,6 +7,7 @@ body {
     display: flex;
     justify-content: center;
     margin-top: 50px;
+    padding: 0;
 }
 
 .grid-container{
@@ -45,3 +46,31 @@ body {
     grid-template-columns: repeat(var(--grid-cols), 1fr);
     /* border-left: 1px solid black; */
 }
+
+.orientation-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+
+}
+
+.disabled-board::after {
+    content: '';
+    z-index: 1;
+    position: absolute;
+    height: 100%;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+  }
+  
+  .ship-cell {
+    background-color: black;
+  }
+  
+  .hovered-cell {
+    background-color: rgb(52, 255, 52);
+  }
+  .invalid-placement {
+    background-color: rgb(222, 44, 44);
+  }

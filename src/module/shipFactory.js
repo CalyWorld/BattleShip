@@ -1,7 +1,8 @@
-const shipFactory = ((length) => {
+const shipFactory = ((length, name) => {
 
     let shipArray = Array(length).fill("");
     const getShipLength = () => length;
+    const getShipName = ()=> name;
     const getShipArray = () => [...shipArray];
 
     const hit = () => {
@@ -24,6 +25,7 @@ const shipFactory = ((length) => {
     return {
         getShipArray,
         getShipLength,
+        getShipName,
         hit,
         hitCounter,
         isSunk,
