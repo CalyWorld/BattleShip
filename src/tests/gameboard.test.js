@@ -8,20 +8,16 @@ test("check if gameboard is empty", () => {
 
 test("check if ship is placed at gameboard coordinate horizontally", () => {
     let gameboard = gameboardFactory();
-    let ship = shipFactory(4);
+    let ship = shipFactory(2);
     expect(gameboard.placeShip(0, 0, ship, "horizontal")).toEqual(true);
-    expect(gameboard.placeShip(0, 5, ship, "horizontal")).toEqual(true);
-    expect(gameboard.placeShip(0, 6, ship, "horizontal")).toEqual(false);
-    expect(gameboard.placeShip(0, 7, ship, "horizontal")).toEqual(false);
+    expect(gameboard.placeShip(0, 2, ship, "horizontal")).toEqual(false);
 });
 
 test("check if ship is placed at gameboard coordinate vertically", () => {
     let gameboard = gameboardFactory();
     let ship = shipFactory(2);
     expect(gameboard.placeShip(5, 0, ship, "vertical")).toEqual(true);
-    expect(gameboard.placeShip(6, 0, ship, "vertical")).toEqual(false);
-    expect(gameboard.placeShip(7, 0, ship, "vertical")).toEqual(true);
-    expect(gameboard.placeShip(8, 0, ship, "vertical")).toEqual(false);
+    expect(gameboard.placeShip(7, 0, ship, "vertical")).toEqual(false);
 });
 
 test("check if ship length overlaps gameboard horizontally", () => {
@@ -58,6 +54,24 @@ test("ships can't stack over each other vertically", () => {
     expect(gameboard.cellEmpty(4, 0, "vertical", 4)).toEqual(false);
     expect(gameboard.cellEmpty(0, 0, "vertical", 4)).toEqual(true);
     expect(gameboard.cellEmpty(8, 0, "vertical", 4)).toEqual(false);
+});
+
+test("ships not surrounding each other horizontally", () => {
+    let gameboard = gameboardFactory();
+    let ship = shipFactory(2);
+    let ship2 = shipFactory(4);
+    gameboard.placeShip(0, 0, ship, "horizontal");
+    gameboard.placeShip(0, 2, ship2, "horizontal");
+    expect(gameboard.shipSurrounding(0, 2, ship2.getShipLength(), "horizontal")).toEqual(false);
+});
+
+test("ships not surrounding each other vertically", () => {
+    let gameboard = gameboardFactory();
+    let ship = shipFactory(2);
+    let ship2 = shipFactory(4)
+    gameboard.placeShip(0, 0, ship, "vertical");
+    gameboard.placeShip(2, 0, ship2, "vertical");
+    expect(gameboard.shipSurrounding(2, 0, ship2.getShipLength(), "vertical")).toEqual(false);
 });
 
 
