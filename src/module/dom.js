@@ -1,10 +1,9 @@
-
 import { Game } from "./game";
 import { utils } from "./util"
 
 
 const playerBoard = document.getElementById("playerBoard");
-const ComputerBoard = document.getElementById("computerBoard");
+const computerBoard = document.getElementById("computerBoard");
 const direction = document.getElementById("direction");
 
 let currDirection = "horizontal";
@@ -29,14 +28,14 @@ const renderPlayerBoard = () => {
 
 const renderComputerBoard = () => {
     let gameboard = Game().getComputerPlayer().getGameboard().showGameboard();
-    ComputerBoard.style.setProperty('--grid-rows', gameboard.length);
-    ComputerBoard.style.setProperty('--grid-cols', gameboard.length);
+    computerBoard.style.setProperty('--grid-rows', gameboard.length);
+    computerBoard.style.setProperty('--grid-cols', gameboard.length);
     for (let r = 0; r < gameboard.length; r++) {
         for (let c = 0; c < gameboard.length; c++) {
             let cell = document.createElement("div");
             cell.classList.add("grid-item");
             cell.dataset.coord = [r, c];
-            ComputerBoard.appendChild(cell);
+            computerBoard.appendChild(cell);
         }
     }
 
@@ -54,13 +53,10 @@ const displayShipOnGameboard = (e, currShip, currCell, nextShip) => {
         cell.classList.remove("hovered-cell");
         cell.classList.add("ship-cell");
     }
-    // for (let i = 0; i < nextShip.getShipLength(); i++) {
-    //     currCell[i].classList.add("invalid-placement");
-    // }
     return result;
 };
 
-const CellsOnHover = (e, currShip, currCell) => {
+const cellsOnHover = (e, currShip, currCell) => {
     if (currShip === undefined) return;
     const playerCells = [...playerBoard.children];
     let element = e.target;
@@ -101,12 +97,12 @@ const placeCellsController = () => {
         currShip = ships.shift();
         if (currShip == undefined) {
             enableBoards();
-            ComputerBoard.classList.remove("disable-board");
+            computerBoard.classList.remove("disable-board");
         }
     });
     playerBoard.addEventListener("mouseover", (e) => {
         if (e.target !== e.currentTarget) {
-            CellsOnHover(e, currShip, currCell);
+            cellsOnHover(e, currShip, currCell);
         }
     });
 
@@ -125,6 +121,64 @@ const findCell = (cells, row, column) => {
         parseInt(cell.getAttribute("data-coord")[2]) == column);
 };
 
+
+const updatePlayerBoard = (cells) => {
+    let board = game.getPlayer().getGameboard().showGameboard();
+    for (let row = 0; row < board.length; row++) {
+        for (let column = 0; column < board.length; column++) {
+            if (board[row][column] !== "" && board[row][column].hit()) {
+                createAttackSpan(false, cells, row, column);
+            } else if (board[row][column] == "miss") {
+                createAttackSpan(true, cells, row, column);
+            }
+        }
+    }
+}
+
+const updateComputerBoard = (cells) => {
+    let board = game.getComputerPlayer().getGameboard().showGameboard();
+    for (let row = 0; row < board.length; row++) {
+        for (let column = 0; column < board.length; column++) {
+            if (board[row][column] !== "" && board[row][column].hit()) {
+                createAttackSpan(false, cells, row, column);
+            } else if (board[row][column] == "miss") {
+                createAttackSpan(true, cells, row, column);
+            }
+        }
+    }
+}
+
+const createAttackSpan = (isMiss, cells, row, column) => {
+    const span = document.createElement("span");
+    let cell = findCell(cells, row, column);
+    if (isMiss) {
+        span.classList.add("attack", "attack-missed");
+    } else {
+        span.classList.add("attack", "attack-succesful");
+    }
+    cell.appendChild(span);
+};
+
+const attackBoard = (element) => {
+    const playerCells = [...playerBoard.children];
+    const computerCells = [...computerBoard.children];
+    let row = parseInt(element.getAttribute("data-coord")[0]);
+    let column = parseInt(element.getAttribute("data-coord")[1]);
+    let winner = game.playerTurn(row, column);
+    updatePlayerBoard(playerCells);
+    updateComputerBoard(computerCells);
+    if (winner) {
+        disableBoards();
+        game.gameOver();
+    }
+}
+
+const computerAttackController = () => {
+    computerBoard.addEventListener("click", (e) => {
+        attackBoard(e.target)
+    });
+}
+
 const changeDirection = (direction) => {
     if (currDirection == direction) {
         currDirection = "horizontal";
@@ -135,7 +189,12 @@ const changeDirection = (direction) => {
 
 const enableBoards = () => {
     playerBoard.style.pointerEvents = "auto";
-    playerBoard.style.pointerEvents = "auto";
+    computerBoard.style.pointerEvents = "auto";
+}
+
+const disableBoards = () => {
+    playerBoard.style.pointerEvents = "none";
+    ComputerBoard.style.pointerEvents = "none";
 }
 
 const getDirectionController = () => {
@@ -150,6 +209,7 @@ const show = () => {
     renderComputerBoard();
     placeCellsController();
     getDirectionController();
+    computerAttackController();
 }
 
 
