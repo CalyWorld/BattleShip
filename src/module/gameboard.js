@@ -1,6 +1,6 @@
 import { utils } from "./util";
 
-const gameboardFactory = ()=>{
+const gameboardFactory = () => {
 
     let gameboardArray = new Array(10).fill("").map(() => Array(10).fill(""));
     let ships = utils().getCreatedShips();
@@ -9,10 +9,12 @@ const gameboardFactory = ()=>{
 
     const placeShip = (row, column, ship, direction) => {
         let shipFit = shipfit(row, column, direction, ship.getShipLength());
-         if (!shipFit) return false;
+        if (!shipFit) return false;
         let checkSpace = cellEmpty(row, column, direction, ship.getShipLength());
         if (!checkSpace) return false;
-        
+        let shipSurround = shipSurrounding(row, column, ship.getShipLength(), direction);
+        if (!shipSurround) return false;
+
         if (direction == "horizontal") {
             for (let i = 0; i < ship.getShipLength(); i++) {
                 gameboardArray[row][column + i] = ship;
@@ -62,6 +64,34 @@ const gameboardFactory = ()=>{
         }
     }
 
+    const shipSurrounding = (row, column, length, direction) => {
+        if (direction == "horizontal") {
+            for (let c = column - 1; c <= column + length; c++) {
+                if (c < 0 || c > 9) continue;
+                for (let r = row - 1; r <= row + 1; r++) {
+                    if (r < 0 || r > 9) continue;
+                    if (cellEmpty(r, c, direction, length)) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+        } else if (direction == "vertical") {
+            for (let c = column - 1; c <= column + 1; c++) {
+                if (c < 0 || c > 9) continue;
+                for (let r = row - 1; r <= row + length; r++) {
+                    if (r < 0 || r > 9) continue;
+                    if (cellEmpty(r, c, direction, length)) {
+                        return true;
+                    }else{
+                        return false
+                    }
+                }
+            }
+        }
+    }
+
     const recieveAttack = (row, column) => {
         let checkBoardAttack = checkAttack(row, column);
         if (!checkBoardAttack) return false;
@@ -79,9 +109,9 @@ const gameboardFactory = ()=>{
         }
     }
 
-    const shipSunk = () =>{
-        const shipSunk = (currShip) => currShip.isSunk();
-        return ships.every(shipSunk);
+    const shipSunk = () => {
+        const shipSunkStatus = (eachShip) => eachShip.isSunk();
+        return ships.every(shipSunkStatus);
     }
 
     const checkAttack = (row, column) => {
@@ -111,6 +141,7 @@ const gameboardFactory = ()=>{
         checkNotHit,
         shipAttack,
         shipSunk,
+        shipSurrounding,
     }
 }
 
