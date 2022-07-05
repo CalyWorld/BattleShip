@@ -1,6 +1,9 @@
-function gameboardFactory() {
+import { utils } from "./util";
+
+const gameboardFactory = ()=>{
 
     let gameboardArray = new Array(10).fill("").map(() => Array(10).fill(""));
+    let ships = utils().getCreatedShips();
 
     const showGameboard = () => [...gameboardArray];
 
@@ -72,7 +75,13 @@ function gameboardFactory() {
             gameboardArray[row][column] = "miss";
         } else if (gameboardArray[row][column] !== "") {
             gameboardArray[row][column].hit();
+            shipSunk();
         }
+    }
+
+    const shipSunk = () =>{
+        const shipSunk = (currShip) => currShip.isSunk();
+        return ships.every(shipSunk);
     }
 
     const checkAttack = (row, column) => {
@@ -101,6 +110,7 @@ function gameboardFactory() {
         recieveAttack,
         checkNotHit,
         shipAttack,
+        shipSunk,
     }
 }
 
