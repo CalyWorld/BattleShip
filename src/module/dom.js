@@ -4,7 +4,7 @@ import { utils } from "./util"
 
 const playerBoard = document.getElementById("playerBoard");
 const computerBoard = document.getElementById("computerBoard");
-const direction = document.getElementById("direction");
+const direction = document.querySelector("#direction");
 
 let currDirection = "horizontal";
 let currCell = [];
@@ -42,18 +42,47 @@ const renderComputerBoard = () => {
 };
 
 
-const displayShipOnGameboard = (e, currShip, currCell, nextShip) => {
+const displayShipOnGameboard = (e, currShip, currCell) => {
     if (currShip === undefined) return;
     let element = e.target;
     let row = parseInt(element.getAttribute("data-coord")[0]);
     let column = parseInt(element.getAttribute("data-coord")[2]);
     let result = game.placePlayerShip(row, column, currShip, currDirection);
+    console.table(game.getPlayer().getGameboard().showGameboard());
     if (!result) return;
     for (const cell of currCell) {
         cell.classList.remove("hovered-cell");
         cell.classList.add("ship-cell");
     }
+    colorSurroundCells(row, column, currShip, currDirection);
     return result;
+};
+
+const colorSurroundCells = (row, column, currShip, currDirection) => {
+    const playerCells = [...playerBoard.children];
+    if (currDirection == "horizontal") {
+        for (let c = column - 1; c <= column + currShip.getShipLength(); c++) {
+            if (c < 0 || c > 9) continue;
+            for (let r = row - 1; r <= row + 1; r++) {
+                if (r < 0 || r > 9) continue;
+                let cell = findCell(playerCells, r, c);
+                if (!cell.classList.contains("ship-cell")) {
+                    cell.classList.add("surrounding-cell");
+                }
+            }
+        }
+    } else if (currDirection == "vertical") {
+        for (let c = column - 1; c <= column + 1; c++) {
+            if (c < 0 || c > 9) continue;
+            for (let r = row - 1; r <= row + currShip.getShipLength(); r++) {
+                if (r < 0 || r > 9) continue;
+                let cell = findCell(playerCells, r, c);
+                if (!cell.classList.contains("ship-cell")) {
+                    cell.classList.add("surrounding-cell");
+                }
+            }
+        }
+    }
 };
 
 const cellsOnHover = (e, currShip, currCell) => {
@@ -91,8 +120,7 @@ const cellsOfHover = (e) => {
 
 const placeCellsController = () => {
     playerBoard.addEventListener("click", (e) => {
-        let nextShip = ships[0] || 1;
-        const result = displayShipOnGameboard(e, currShip, currCell, nextShip);
+        const result = displayShipOnGameboard(e, currShip, currCell);
         if (!result) return;
         currShip = ships.shift();
         if (currShip == undefined) {
@@ -122,36 +150,25 @@ const findCell = (cells, row, column) => {
 };
 
 
-const updatePlayerBoard = (cells) => {
+
+const updateBoard = (cells) => {
     let board = game.getPlayer().getGameboard().showGameboard();
     for (let row = 0; row < board.length; row++) {
         for (let column = 0; column < board.length; column++) {
-            if (board[row][column] !== "" && board[row][column].hit()) {
-                createAttackSpan(false, cells, row, column);
-            } else if (board[row][column] == "miss") {
-                createAttackSpan(true, cells, row, column);
+            if (board[row][column] == "miss") {
+                createAttackSpan(true, cells, row, column); 
             }
+            else if (board[row][column] !== "" && board[row][column].hit()) {
+                createAttackSpan(false, cells, row, column);
+            } 
         }
     }
-}
-
-const updateComputerBoard = (cells) => {
-    let board = game.getComputerPlayer().getGameboard().showGameboard();
-    for (let row = 0; row < board.length; row++) {
-        for (let column = 0; column < board.length; column++) {
-            if (board[row][column] !== "" && board[row][column].hit()) {
-                createAttackSpan(false, cells, row, column);
-            } else if (board[row][column] == "miss") {
-                createAttackSpan(true, cells, row, column);
-            }
-        }
-    }
-}
+};
 
 const createAttackSpan = (isMiss, cells, row, column) => {
     const span = document.createElement("span");
     let cell = findCell(cells, row, column);
-    if (isMiss) {
+    if (isMiss == true) {
         span.classList.add("attack", "attack-missed");
     } else {
         span.classList.add("attack", "attack-succesful");
@@ -159,28 +176,34 @@ const createAttackSpan = (isMiss, cells, row, column) => {
     cell.appendChild(span);
 };
 
-const attackBoard = (element) => {
+const attackBoard = (e) => {
+    let element = e.target.closest(".grid-item");
+    if(!element) return;
     const playerCells = [...playerBoard.children];
     const computerCells = [...computerBoard.children];
     let row = parseInt(element.getAttribute("data-coord")[0]);
-    let column = parseInt(element.getAttribute("data-coord")[1]);
+    let column = parseInt(element.getAttribute("data-coord")[2]);
+    console.log(row);
+    console.log(column);
     let winner = game.playerTurn(row, column);
-    updatePlayerBoard(playerCells);
-    updateComputerBoard(computerCells);
+    updateBoard(playerCells);
+    updateBoard(computerCells);
     if (winner) {
         disableBoards();
-        game.gameOver();
+        game.gameOver(winner);
     }
 }
 
 const computerAttackController = () => {
     computerBoard.addEventListener("click", (e) => {
-        attackBoard(e.target)
+        if(e.target !== e.currentTarget){
+        attackBoard(e)
+        }
     });
 }
 
 const changeDirection = (direction) => {
-    if (currDirection == direction) {
+    if (currDirection === direction) {
         currDirection = "horizontal";
     } else {
         currDirection = "vertical"
@@ -194,7 +217,7 @@ const enableBoards = () => {
 
 const disableBoards = () => {
     playerBoard.style.pointerEvents = "none";
-    ComputerBoard.style.pointerEvents = "none";
+    computerBoard.style.pointerEvents = "none";
 }
 
 const getDirectionController = () => {
@@ -208,10 +231,12 @@ const show = () => {
     renderPlayerBoard();
     renderComputerBoard();
     placeCellsController();
-    getDirectionController();
     computerAttackController();
 }
 
+getDirectionController();
 
-export { show };
+
+
+export { show};
 

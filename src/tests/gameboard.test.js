@@ -1,6 +1,7 @@
 import { gameboardFactory } from '../module/gameboard';
 import { shipFactory } from "../module/shipFactory";
 
+
 test("check if gameboard is empty", () => {
     let gameboard = gameboardFactory();
     expect(gameboard.showGameboard()[0][0]).toEqual("");
@@ -107,9 +108,9 @@ test("gameboard misses attack", () => {
     gameboard.placeShip(0, 1, ship, "horizontal");
     gameboard.placeShip(1, 0, ship, "vertical");
     gameboard.placeShip(2, 0, ship, "vertical");
-    gameboard.shipAttack(0, 5)
-    gameboard.shipAttack(0, 7);
-    gameboard.shipAttack(7, 0);
+    gameboard.recieveAttack(0, 5)
+    gameboard.recieveAttack(0, 7);
+    gameboard.recieveAttack(7, 0);
     expect(gameboard.showGameboard()[0][5]).toBe("miss");
     expect(gameboard.showGameboard()[0][7]).toBe("miss");
     expect(gameboard.showGameboard()[7][0]).toBe("miss");
@@ -138,7 +139,7 @@ test("ship sinks when not all ship parts have been attack", () => {
     gameboard.recieveAttack(0, 1);
     gameboard.recieveAttack(0, 2);
     expect(ship.isSunk()).toEqual(false);
-})
+});
 
 test("ship sinks when ship parts have been attack", () => {
     let ship = shipFactory(4);
@@ -152,6 +153,6 @@ test("ship sinks when ship parts have been attack", () => {
     gameboard.recieveAttack(0, 2);
     gameboard.recieveAttack(0, 3);
     expect(ship.isSunk()).toEqual(true);
-})
+});
 
 

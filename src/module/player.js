@@ -37,8 +37,8 @@ const computerFactory = (name, number) => {
     const getGameboard = () => {
         return gameboard
     };
-    const getComputerAiName = () => name;
-    const getComputerAiNum = () => number;
+    const getPlayerName = () => name;
+    const getPlayerNum = () => number;
 
     const placeShipRandomly = (ship) => {
         let row = 9;
@@ -49,7 +49,7 @@ const computerFactory = (name, number) => {
             row = Math.floor(Math.random() * 10);
             column = Math.floor(Math.random() * 10);
         }
-        gameboard.placeShip(row, column, ship, orientation[direction]);
+        return gameboard.placeShip(row, column, ship, orientation[direction]);
     }
 
     const attackRecieved = (row,column) =>{
@@ -65,14 +65,14 @@ const computerFactory = (name, number) => {
         let row = Math.floor(Math.random() * 10);
         let column = Math.floor(Math.random() * 10);
     
-        playerToAttack.attackRecieved(row,column);
+        return playerToAttack.attackRecieved(row,column);
     }
 
 
     return {
         getGameboard,
-        getComputerAiName,
-        getComputerAiNum,
+        getPlayerName,
+        getPlayerNum,
         attackRecieved,
         sendAttack,
         placeShipRandomly,

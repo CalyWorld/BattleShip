@@ -84,7 +84,7 @@ const gameboardFactory = () => {
                     if (r < 0 || r > 9) continue;
                     if (cellEmpty(r, c, direction, length)) {
                         return true;
-                    }else{
+                    } else {
                         return false
                     }
                 }
@@ -97,13 +97,15 @@ const gameboardFactory = () => {
         if (!checkBoardAttack) return false;
         let checkHitLegal = checkNotHit(row, column);
         if (!checkHitLegal) return false;
-        shipAttack(row, column);
+        shipAttack(row, column, gameboardArray);
     }
 
-    const shipAttack = (row, column) => {
+    const shipAttack = (row, column, gameboardArray) => {
+        gameboardArray[row][column] == true || "";
         if (gameboardArray[row][column] == "") {
             gameboardArray[row][column] = "miss";
-        } else if (gameboardArray[row][column] !== "") {
+
+        } else {
             gameboardArray[row][column].hit();
             shipSunk();
         }
@@ -123,7 +125,7 @@ const gameboardFactory = () => {
     }
 
     const checkNotHit = (row, column) => {
-        if (gameboardArray[row][column] != true && gameboardArray[row][column] !== "miss") {
+        if (gameboardArray[row][column] !== true && gameboardArray[row][column] !== "miss") {
             return true;
         } else {
             return false;

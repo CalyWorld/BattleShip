@@ -96,7 +96,7 @@ test("player should be able to sink when ship part have been hit", () => {
     player.getGameboard().recieveAttack(x, y);
     player.sendAttack(x, y, player);
     expect(player.getGameboard().showGameboard()[x][y].hitCounter()).toEqual(2);
-    expect(ship.isSunk()).toEqual(false);
+    expect(player.getGameboard().showGameboard()[x][y].isSunk()).toEqual(false);
 });
 
 test("player should be able to send attack and shink all ship parts", () => {
@@ -120,8 +120,8 @@ test("player should be able to send attack and shink all ship parts", () => {
 
 test("Computer must have a name and number", () => {
     let computerAi = computerFactory("computer", 1);
-    expect(computerAi.getComputerAiName()).toEqual("computer");
-    expect(computerAi.getComputerAiNum()).toEqual(1);
+    expect(computerAi.getPlayerName()).toEqual("computer");
+    expect(computerAi.getPlayerNum()).toEqual(1);
 });
 
 test("computer should be able to placeShips randomly in an direction", () => {

@@ -10,42 +10,36 @@ const Game = (() => {
     const getPlayer = () => player;
     const getComputerPlayer = () => computer;
 
-    const placePlayerShip = (row,column,ship,direction)=>{
-        return player.getGameboard().placeShip(row,column,ship,direction);
+    const placePlayerShip = (row, column, ship, direction) => {
+        return player.getGameboard().placeShip(row, column, ship, direction);
     };
 
-    for(let i = 0; i<ships.length; i++){
+    for (let i = 0; i < ships.length; i++) {
         computer.placeShipRandomly(ships[i]);
     };
 
-    const playerAttack = (row,column,computer) =>{
-       return player.sendAttack(row,column,computer);
-    }
+    console.table(computer.getGameboard().showGameboard());
 
-    const computerAttack = (playerToAttack) =>{
+    const playerAttack = (row, column, computer) => {
+        return player.sendAttack(row, column, computer);
+    };
+
+    const computerAttack = (playerToAttack) => {
         return computer.sendAttack(playerToAttack);
-    }
+    };
 
-    const playerTurn = (row,column) => {
-        let activePlayer = playerAttack(row,column,computer);
-        if(!activePlayer) return;
+    const playerTurn = (row, column) => {
+        let activePlayer = playerAttack(row, column, computer);
+        if (!activePlayer) return;
         if(computer.getGameboard().shipSunk()){
             return player;
-        }
-        computerAttack(activePlayer);
-        if(activePlayer.getGameboard().shipSunk()){
+        }else if(player.getGameboard().shipSunk()){
             return computer;
         }
-    }
+    };
 
-    const gameOver = () => {
-        if (player.getGameboard().isSunk == true) {
-            console.log(`${computer.getComputerAiName()} is the winner`);
-        } else if (computer.getGameboard().isSunk == true) {
-            console.log(`${player.getPlayerName()} is the winner`);
-        } else if (player.getGameboard().isSunk == false && computer.getGameboard().shipSunk == false) {
-            return false;
-        }
+    const gameOver = (winningPlayer) => {
+        console.log(winningPlayer.getPlayerName());
     };
 
     return {
@@ -56,7 +50,7 @@ const Game = (() => {
         computerAttack,
         playerAttack,
         playerTurn
-    }
+    };
 
 });
 export { Game };
