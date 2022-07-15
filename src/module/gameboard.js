@@ -97,23 +97,21 @@ const gameboardFactory = () => {
         if (!checkBoardAttack) return false;
         let checkHitLegal = checkNotHit(row, column);
         if (!checkHitLegal) return false;
-        shipAttack(row, column, gameboardArray);
-    }
+        shipAttack(row, column);
+    };
 
-    const shipAttack = (row, column, gameboardArray) => {
-        gameboardArray[row][column] == true || "";
+    const shipAttack = (row, column) => {
         if (gameboardArray[row][column] == "") {
             gameboardArray[row][column] = "miss";
 
-        } else {
+        } else if (gameboardArray[row][column] !== "") {
             gameboardArray[row][column].hit();
             shipSunk();
         }
     }
 
     const shipSunk = () => {
-        const shipSunkStatus = (eachShip) => eachShip.isSunk();
-        return ships.every(shipSunkStatus);
+        return ships.every((eachShip) => eachShip.isSunk());
     }
 
     const checkAttack = (row, column) => {
@@ -148,3 +146,5 @@ const gameboardFactory = () => {
 }
 
 export { gameboardFactory }
+
+

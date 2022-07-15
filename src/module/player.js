@@ -52,10 +52,10 @@ const computerFactory = (name, number) => {
         return gameboard.placeShip(row, column, ship, orientation[direction]);
     }
 
-    const attackRecieved = (row,column) =>{
-        if(gameboard.recieveAttack(row,column)){
+    const attackRecieved = (row, column) => {
+        if (gameboard.recieveAttack(row, column)) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -64,8 +64,8 @@ const computerFactory = (name, number) => {
 
         let row = Math.floor(Math.random() * 10);
         let column = Math.floor(Math.random() * 10);
-    
-        return playerToAttack.attackRecieved(row,column);
+
+        return playerToAttack.attackRecieved(row, column);
     }
 
 

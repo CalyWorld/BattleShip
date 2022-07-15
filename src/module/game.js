@@ -18,24 +18,14 @@ const Game = (() => {
         computer.placeShipRandomly(ships[i]);
     };
 
-    console.table(computer.getGameboard().showGameboard());
-
-    const playerAttack = (row, column, computer) => {
-        return player.sendAttack(row, column, computer);
-    };
-
-    const computerAttack = (playerToAttack) => {
-        return computer.sendAttack(playerToAttack);
-    };
 
     const playerTurn = (row, column) => {
-        let activePlayer = playerAttack(row, column, computer);
+        let activePlayer = player.sendAttack(row, column, computer);
         if (!activePlayer) return;
-        if(computer.getGameboard().shipSunk()){
-            return player;
-        }else if(player.getGameboard().shipSunk()){
-            return computer;
-        }
+        if (computer.getGameboard().shipSunk()) return player;
+
+        computer.sendAttack(player);
+        if (player.getGameboard().shipSunk()) return computer;
     };
 
     const gameOver = (winningPlayer) => {
@@ -47,8 +37,6 @@ const Game = (() => {
         getPlayer,
         getComputerPlayer,
         placePlayerShip,
-        computerAttack,
-        playerAttack,
         playerTurn
     };
 

@@ -48,7 +48,6 @@ const displayShipOnGameboard = (e, currShip, currCell) => {
     let row = parseInt(element.getAttribute("data-coord")[0]);
     let column = parseInt(element.getAttribute("data-coord")[2]);
     let result = game.placePlayerShip(row, column, currShip, currDirection);
-    console.table(game.getPlayer().getGameboard().showGameboard());
     if (!result) return;
     for (const cell of currCell) {
         cell.classList.remove("hovered-cell");
@@ -128,6 +127,7 @@ const placeCellsController = () => {
             computerBoard.classList.remove("disable-board");
         }
     });
+
     playerBoard.addEventListener("mouseover", (e) => {
         if (e.target !== e.currentTarget) {
             cellsOnHover(e, currShip, currCell);
@@ -156,11 +156,11 @@ const updateBoard = (cells) => {
     for (let row = 0; row < board.length; row++) {
         for (let column = 0; column < board.length; column++) {
             if (board[row][column] == "miss") {
-                createAttackSpan(true, cells, row, column); 
+                createAttackSpan(true, cells, row, column);
             }
             else if (board[row][column] !== "" && board[row][column].hit()) {
                 createAttackSpan(false, cells, row, column);
-            } 
+            }
         }
     }
 };
@@ -177,8 +177,8 @@ const createAttackSpan = (isMiss, cells, row, column) => {
 };
 
 const attackBoard = (e) => {
-    let element = e.target.closest(".grid-item");
-    if(!element) return;
+    let element = e.target;;
+    if (!element) return;
     const playerCells = [...playerBoard.children];
     const computerCells = [...computerBoard.children];
     let row = parseInt(element.getAttribute("data-coord")[0]);
@@ -196,8 +196,8 @@ const attackBoard = (e) => {
 
 const computerAttackController = () => {
     computerBoard.addEventListener("click", (e) => {
-        if(e.target !== e.currentTarget){
-        attackBoard(e)
+        if (e.target !== e.currentTarget) {
+            attackBoard(e)
         }
     });
 }
@@ -238,5 +238,5 @@ getDirectionController();
 
 
 
-export { show};
+export { show };
 

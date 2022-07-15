@@ -1,4 +1,4 @@
-import {show} from "./module/dom"
+import { show } from "./module/dom"
 
 show();
 

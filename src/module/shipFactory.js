@@ -2,7 +2,7 @@ const shipFactory = ((length, name) => {
 
     let shipArray = Array(length).fill("");
     const getShipLength = () => length;
-    const getShipName = ()=> name;
+    const getShipName = () => name;
     const getShipArray = () => [...shipArray];
 
     const hit = () => {

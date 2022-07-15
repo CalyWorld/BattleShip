@@ -1,6 +1,6 @@
-import {shipFactory} from "./shipFactory";
+// import { shipFactory } from "./shipFactory";
 
-const utils = () =>{
+const utils = () => {
     const createdShips = [];
     let BattleShip = shipFactory(4, "BattleShip");
     let Carrier = shipFactory(5, "Carrier");
@@ -8,14 +8,14 @@ const utils = () =>{
     let Submarine = shipFactory(4, "Submarine");
     let PatrolBoat = shipFactory(2, "Patrol-Boat");
 
-    createdShips.push(BattleShip,Carrier,Destroyer,Submarine,PatrolBoat);
+    createdShips.push(BattleShip, Carrier, Destroyer, Submarine, PatrolBoat);
 
     const getCreatedShips = () => [...createdShips]
 
-    return{
+    return {
         getCreatedShips,
     }
-    
+
 }
 
-export{utils}
+export { utils }
